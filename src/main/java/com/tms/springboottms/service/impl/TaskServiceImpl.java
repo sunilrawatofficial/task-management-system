@@ -2,6 +2,9 @@ package com.tms.springboottms.service.impl;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.tms.springboottms.dto.task.TaskRequestDTO;
@@ -77,5 +80,12 @@ public class TaskServiceImpl  implements TaskService {
     public void deleteTaskById(Long taskId) {
         taskRepository.findById(taskId).orElseThrow(()-> new EntityNotFoundException("Task not found"));
         taskRepository.deleteById(taskId);
+    }
+
+    
+    public Page<TaskResponseDTO> getTasksWithPagination(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return taskRepository.findAll(pageable)
+            .map(TaskResponseDTO::new);
     }
 }

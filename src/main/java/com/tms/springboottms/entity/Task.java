@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.tms.springboottms.entity.type.Status;
+import com.tms.springboottms.enums.Status;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,13 +41,18 @@ public class Task {
     private Status status = Status.TODO;
 
     @ManyToOne
-    @JoinColumn(name = "assigned_to")
-    private User assignedTo;
-
-    @ManyToOne
     @JoinColumn(name = "created_by")
     private User createdBy;
 
+
+    @ManyToOne
+    @JoinColumn(name = "assigned_to", nullable= true)
+    private User assignedTo;
+
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
 }

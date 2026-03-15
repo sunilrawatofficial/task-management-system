@@ -1,6 +1,6 @@
 package com.tms.springboottms.dto.task;
 
-import com.tms.springboottms.entity.type.Status;
+import com.tms.springboottms.enums.Status;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

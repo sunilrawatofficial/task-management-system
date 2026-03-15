@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.tms.springboottms.entity.Task;
-import com.tms.springboottms.entity.type.Status;
+import com.tms.springboottms.enums.Status;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

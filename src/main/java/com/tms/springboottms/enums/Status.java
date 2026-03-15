@@ -1,4 +1,4 @@
-package com.tms.springboottms.entity.type;
+package com.tms.springboottms.enums;
 
 public enum Status {
     TODO,
