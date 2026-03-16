@@ -1,6 +1,6 @@
-package com.tms.springboottms.dto;
+package com.tms.springboottms.dto.login;
 
-public class LoginDTO {
+public class LoginRequestDTO {
     private  String username;
     private  String password;
 }
