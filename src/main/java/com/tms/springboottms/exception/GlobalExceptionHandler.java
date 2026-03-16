@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<String>> handleException(Exception e) {
         return ResponseEntity
                 .internalServerError()
-                .body(new ApiResponse<>(500, "Something went wrong"));
+                .body(new ApiResponse<>(500, e.getMessage()));
     }
 
     @ExceptionHandler(EntityNotFoundException.class)

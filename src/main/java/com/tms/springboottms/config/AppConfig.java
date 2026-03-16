@@ -12,11 +12,6 @@ import org.springframework.context.annotation.Configuration;
 public class AppConfig {
 
   // @Bean
-  // public Pass passwordEncoder() {
-  //   return new BCryptPasswordEncoder();
-  // }
-
-  // @Bean
   // public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
   //     return configuration.getAuthenticationManager();
   // }  

@@ -3,12 +3,15 @@ package com.tms.springboottms.dto.register;
 
 import com.tms.springboottms.enums.Role;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 
 @Data
-@AllArgsConstructor
+@Getter
 public class RegisterRequestDTO {
 
     @NotBlank(message = "username is required")

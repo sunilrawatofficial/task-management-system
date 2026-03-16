@@ -8,7 +8,7 @@ import com.tms.springboottms.dto.register.RegisterRequestDTO;
 import com.tms.springboottms.dto.register.RegisterResponseDTO;
 
 public interface AuthService {
-    LoginResponseDTO login(LoginRequestDTO loginRequestDTO);
+    String login(LoginRequestDTO loginRequestDTO);
 
     RegisterResponseDTO register(RegisterRequestDTO registerRequestDTO);
 }

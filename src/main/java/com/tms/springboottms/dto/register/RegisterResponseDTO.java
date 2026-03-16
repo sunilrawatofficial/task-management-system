@@ -19,5 +19,6 @@ public class RegisterResponseDTO {
     public RegisterResponseDTO(User savedUser) {
         this.id = savedUser.getId();
         this.username = savedUser.getUsername();
+        this.role = savedUser.getRole();
     }
 }
