@@ -1,15 +1,12 @@
 package com.tms.springboottms.service.impl;
 
-import com.tms.springboottms.config.JwtService;
-import java.util.Optional;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.tms.springboottms.config.JwtService;
 import com.tms.springboottms.dto.login.LoginRequestDTO;
-import com.tms.springboottms.dto.login.LoginResponseDTO;
 import com.tms.springboottms.dto.register.RegisterRequestDTO;
 import com.tms.springboottms.dto.register.RegisterResponseDTO;
 import com.tms.springboottms.entity.User;
@@ -36,9 +33,7 @@ public class AuthServiceImpl implements AuthService {
             )
         );
         return jwtService.generateToken(loginRequestDTO.getUsername());
-
         // Optional<User> savedUser = userRepository.findByUsername(loginRequestDTO.getUsername());
-        
     }
 
     @Override
