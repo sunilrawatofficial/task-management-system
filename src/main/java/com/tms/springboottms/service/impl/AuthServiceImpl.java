@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.tms.springboottms.config.JwtService;
 import com.tms.springboottms.dto.login.LoginRequestDTO;
+import com.tms.springboottms.dto.login.LoginResponseDTO;
 import com.tms.springboottms.dto.register.RegisterRequestDTO;
 import com.tms.springboottms.dto.register.RegisterResponseDTO;
 import com.tms.springboottms.entity.User;
@@ -25,15 +26,16 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public String login(LoginRequestDTO loginRequestDTO) {
+    public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
+
+        String username = loginRequestDTO.getUsername();
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
-                loginRequestDTO.getUsername(),
+                username,
                 loginRequestDTO.getPassword()
             )
         );
-        return jwtService.generateToken(loginRequestDTO.getUsername());
-        // Optional<User> savedUser = userRepository.findByUsername(loginRequestDTO.getUsername());
+        return new LoginResponseDTO(userRepository.findByUsername(username).get().getId(), username, jwtService.generateToken(username));
     }
 
     @Override

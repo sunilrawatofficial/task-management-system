@@ -23,7 +23,7 @@ public class AuthController {
 
     private final AuthService authService;
     @PostMapping("/login")
-    public ApiResponse<String> login(@Valid @RequestBody LoginRequestDTO request) {
+    public ApiResponse<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO request) {
         return new ApiResponse<>(200, authService.login(request));
     }
 
