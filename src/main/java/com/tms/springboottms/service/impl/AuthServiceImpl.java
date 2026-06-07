@@ -16,6 +16,14 @@ import com.tms.springboottms.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * [LOGIN] Flow A — validate credentials then issue JWT.
+ * <pre>
+ *   authenticate() → AuthenticationManager → DaoAuthenticationProvider
+ *                  → CustomUserDetailsService + PasswordEncoder
+ *   then → JwtService.generateToken()
+ * </pre>
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {

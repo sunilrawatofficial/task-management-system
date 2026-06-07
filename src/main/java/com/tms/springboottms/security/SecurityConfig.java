@@ -12,6 +12,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * [STARTUP] Security entry point — runs once when the app starts.
+ * <pre>
+ *   1. /auth/** → public
+ *   2. everything else → must be authenticated (JWT validated by {@link JwtFilter})
+ *   3. exposes PasswordEncoder + AuthenticationManager beans for login
+ * </pre>
+ */
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -21,20 +29,22 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-        .csrf(csrf -> csrf.disable())
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/auth/**").permitAll()
-            .anyRequest().authenticated())
-        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/auth/**").permitAll()
+                .anyRequest().authenticated())
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
+    /** Used at register (encode) and login (matches) via DaoAuthenticationProvider. */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /** Exposes Spring's manager so {@link com.tms.springboottms.service.impl.AuthServiceImpl} can call authenticate() at login. */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

@@ -21,6 +21,95 @@ REST API for user and task management, built with Spring Boot, Spring Security (
 
 ---
 
+## Security code flow (read this first)
+
+All security lives in `security/` + login in `AuthServiceImpl`. Two flows, four key classes.
+
+### Who does what
+
+| # | Class | When | Job |
+|---|-------|------|-----|
+| 1 | `SecurityConfig` | **Startup** | Register rules, `PasswordEncoder`, `AuthenticationManager`, plug in `JwtFilter` |
+| 2 | `AuthServiceImpl` | **Login request** | Call `AuthenticationManager`, then issue JWT |
+| 3 | `JwtFilter` | **Every request** | Read `Bearer` token, validate, set logged-in user |
+| 4 | `CustomUserDetailsService` | **Login + JWT** | Load user from MySQL → `User.builder()` |
+| 5 | `JwtService` | **Login + JWT** | Create token (login) / read token (filter) |
+
+### Startup (once)
+
+```
+SpringApplication.run()
+  → SecurityConfig @Bean methods run
+      → PasswordEncoder bean
+      → AuthenticationManager bean  (internally wires DaoAuthenticationProvider
+                                     → CustomUserDetailsService + PasswordEncoder)
+      → SecurityFilterChain         (JwtFilter added to filter chain)
+```
+
+### Flow A — Login (`POST /auth/login`)
+
+```
+Client
+  → AuthController.login()
+  → AuthServiceImpl.login()
+  → AuthenticationManager.authenticate(username, password)
+      → DaoAuthenticationProvider        [Spring internal — not in your code]
+          → CustomUserDetailsService.loadUserByUsername()
+          → PasswordEncoder.matches()
+  → JwtService.generateToken(username)
+  → LoginResponseDTO + JWT returned
+```
+
+### Flow B — Protected API (`GET /tasks`, `/users`, …)
+
+```
+Client  (Header: Authorization: Bearer <jwt>)
+  → JwtFilter.doFilterInternal()
+      → JwtService.extractUsername(token)
+      → CustomUserDetailsService.loadUserByUsername()
+      → JwtService.isTokenValid()
+      → SecurityContextHolder.setAuthentication()   ← "user is logged in"
+  → SecurityConfig checks .authenticated()
+  → Controller → Service → Repository
+```
+
+### Master diagram
+
+```mermaid
+flowchart TB
+    subgraph startup [Startup — once]
+        SC[SecurityConfig]
+        SC --> PE[PasswordEncoder bean]
+        SC --> AM[AuthenticationManager bean]
+        SC --> FC[SecurityFilterChain + JwtFilter]
+        AM -.->|auto-wires| DAP[DaoAuthenticationProvider]
+        DAP -.-> UDS[CustomUserDetailsService]
+        DAP -.-> PE
+    end
+
+    subgraph login [Flow A — Login]
+        C1[Client] --> AC[AuthController]
+        AC --> AS[AuthServiceImpl]
+        AS --> AM2[AuthenticationManager]
+        AM2 --> UDS2[CustomUserDetailsService]
+        AS --> JWT1[JwtService.generateToken]
+    end
+
+    subgraph protected [Flow B — Protected request]
+        C2[Client + Bearer JWT] --> JF[JwtFilter]
+        JF --> JWT2[JwtService]
+        JF --> UDS3[CustomUserDetailsService]
+        JF --> CTX[SecurityContext]
+        CTX --> CTRL[Controller]
+    end
+```
+
+### Read the code in this order
+
+`SecurityConfig` → `AuthServiceImpl.login()` → `CustomUserDetailsService` → `JwtService` → `JwtFilter`
+
+---
+
 ## High-level project flow
 
 ```mermaid

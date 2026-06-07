@@ -10,6 +10,14 @@ import com.tms.springboottms.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * [LOGIN + JWT] Loads users from MySQL for Spring Security.
+ * <pre>
+ *   Called by:
+ *     - DaoAuthenticationProvider at login (via AuthenticationManager)
+ *     - {@link JwtFilter} on protected requests
+ * </pre>
+ */
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
