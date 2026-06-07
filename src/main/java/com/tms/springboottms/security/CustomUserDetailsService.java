@@ -1,11 +1,11 @@
 package com.tms.springboottms.security;
 
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.tms.springboottms.entity.User;
 import com.tms.springboottms.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -14,14 +14,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-  private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-  @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        var currentUser = userRepository.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
-    User user = userRepository.findByUsername(username)
-        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-    return new CustomUserDetails(user);
-  }
+        return User.builder()
+            .username(currentUser.getUsername())
+            .password(currentUser.getPassword())
+            .roles(currentUser.getRole().name())
+            .build();
+    }
 }

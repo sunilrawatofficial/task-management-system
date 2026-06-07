@@ -102,7 +102,7 @@ sequenceDiagram
     AC->>AS: login()
     AS->>AM: authenticate(username, password)
     AM->>UDS: loadUserByUsername()
-    UDS-->>AM: CustomUserDetails
+    UDS-->>AM: UserDetails
     AM-->>AS: Authentication OK
     AS->>JWT: generateToken(username)
     JWT-->>C: JWT string in ApiResponse
@@ -200,14 +200,14 @@ flowchart LR
 | **Service** | Business rules, transactions, orchestration | `AuthServiceImpl`, `UserServiceImpl`, `TaskServiceImpl` |
 | **Repository** | DB access (Spring Data JPA) | `UserRepository`, `TaskRepository` |
 | **Entity** | JPA mappings, relationships | `User`, `Task` |
-| **Security** | AuthN / JWT | `SecurityConfig`, `JwtFilter`, `JwtService`, `CustomUserDetailsService`, `CustomUserDetails` |
+| **Security** | AuthN / JWT | `SecurityConfig`, `JwtFilter`, `JwtService`, `CustomUserDetailsService` |
 | **Exception** | Centralized errors | `GlobalExceptionHandler` |
 
 **`ApiResponse` logic:** Every successful or error response uses `ApiResponse<T>(status, data)` so clients get a consistent `{ "status": 200, "data": ... }` shape.
 
 **Validation logic:** Invalid request bodies trigger `MethodArgumentNotValidException` → field-level error map in `GlobalExceptionHandler`.
 
-**Role logic:** `User.role` is stored as enum string; `CustomUserDetails` exposes authorities from `user.getRole().name()` for future role-based access rules.
+**Role logic:** `User.role` is stored as enum; `CustomUserDetailsService` maps it to Spring roles via `User.builder().roles(...)` for future `@PreAuthorize` rules.
 
 ---
 
@@ -301,7 +301,7 @@ src/main/java/com/tms/springboottms/
 ├── enums/           # Role, Status
 ├── exception/       # GlobalExceptionHandler
 ├── repository/      # Spring Data repositories
-├── security/        # CustomUserDetails, CustomUserDetailsService
+├── security/        # SecurityConfig, JwtFilter, JwtService, CustomUserDetailsService
 ├── service/         # Interfaces + impl (Auth, User, Task)
 └── utils/           # ApiResponse
 ```
