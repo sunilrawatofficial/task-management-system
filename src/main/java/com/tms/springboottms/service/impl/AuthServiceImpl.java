@@ -5,13 +5,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.tms.springboottms.config.JwtService;
 import com.tms.springboottms.dto.login.LoginRequestDTO;
 import com.tms.springboottms.dto.login.LoginResponseDTO;
 import com.tms.springboottms.dto.register.RegisterRequestDTO;
 import com.tms.springboottms.dto.register.RegisterResponseDTO;
 import com.tms.springboottms.entity.User;
 import com.tms.springboottms.repository.UserRepository;
+import com.tms.springboottms.security.JwtService;
 import com.tms.springboottms.service.AuthService;
 
 import lombok.RequiredArgsConstructor;

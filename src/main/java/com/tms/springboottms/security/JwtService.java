@@ -1,4 +1,4 @@
-package com.tms.springboottms.config;
+package com.tms.springboottms.security;
 
 import java.util.Date;
 

@@ -1,6 +1,5 @@
-package com.tms.springboottms.config;
+package com.tms.springboottms.security;
 
-import com.tms.springboottms.security.CustomUserDetailsService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import lombok.RequiredArgsConstructor;
