@@ -31,6 +31,7 @@ public class UserController {
         return new ApiResponse<>(201, userService.createUser(request));
     }
 
+    // @PreAuthorize("hasRole('ADMIN')") // Method-level security: only admins can access this endpoint
     @GetMapping
     public ApiResponse<List<UserResponseDTO>> getUsers() {
         return new ApiResponse<>(200, userService.getUsers());
