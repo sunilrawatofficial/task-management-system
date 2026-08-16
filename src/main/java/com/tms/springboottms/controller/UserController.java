@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tms.springboottms.dto.user.CreateUserDTO;
 import com.tms.springboottms.dto.user.UserResponseDTO;
-import com.tms.springboottms.service.impl.UserServiceImpl;
+import com.tms.springboottms.service.UserService;
 import com.tms.springboottms.utils.ApiResponse;
 
 import jakarta.validation.Valid;
@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @PostMapping
     public ApiResponse<UserResponseDTO> createUser(@Valid @RequestBody CreateUserDTO request) {
